@@ -9,6 +9,7 @@ const ImageGalleryItem = ({ src, alt, onClick, url }) => {
     </li>
   );
 };
+
 ImageGalleryItem.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,

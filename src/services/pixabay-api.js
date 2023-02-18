@@ -10,5 +10,7 @@ function fetchImage(imageName, API_KEY, URL, page, numberResults) {
     );
   });
 }
+
 const api = { fetchImage };
+
 export default api;

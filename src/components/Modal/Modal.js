@@ -9,6 +9,7 @@ class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }
+
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown);
   }
@@ -18,11 +19,13 @@ class Modal extends Component {
       this.props.onCloseModal();
     }
   };
+
   handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       this.props.onCloseModal();
     }
   };
+
   render() {
     const { src, alt } = this.props;
     return createPortal(
@@ -35,6 +38,7 @@ class Modal extends Component {
     );
   }
 }
+
 Modal.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,

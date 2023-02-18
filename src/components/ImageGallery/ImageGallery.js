@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import s from './ImageGallery.module.css';
-import ImageGalleryItem from 'components/ImageGalleryItem';
+import ImageGalleryItem from 'components/ImageGallery/ImageGalleryItem';
 
 export default function ImageGallery({ imagesData, onClick }) {
   return (
@@ -18,6 +18,7 @@ export default function ImageGallery({ imagesData, onClick }) {
     </ul>
   );
 }
+
 ImageGallery.propTypes = {
   imagesData: PropTypes.arrayOf(
     PropTypes.shape({

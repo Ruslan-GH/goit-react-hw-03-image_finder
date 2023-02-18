@@ -6,12 +6,13 @@ import Button from './Button';
 import Loader from './Loader';
 import Modal from './Modal';
 import { Toaster } from 'react-hot-toast';
-import imageAPI from './services/pixabay-api';
+import imageAPI from '../services/pixabay-api';
 
 export class App extends Component {
   state = {
     imageName: '',
     images: [],
+    imagesLength: '',
     status: 'idle',
     page: 1,
     numberResults: 12,
@@ -30,9 +31,16 @@ export class App extends Component {
 
       imageAPI
         .fetchImage(imageName, API_KEY, URL, page, numberResults)
-        .then(({ hits }) => this.setState({ images: hits, status: 'resolved' }))
+        .then(({ hits }) =>
+          this.setState({
+            images: hits,
+            status: 'resolved',
+            imagesLength: hits.length,
+          })
+        )
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
+
     if (prevState.page !== this.state.page) {
       imageAPI
         .fetchImage(imageName, API_KEY, URL, page, numberResults)
@@ -50,17 +58,28 @@ export class App extends Component {
   handleFormSubmit = imageName => {
     this.setState({ imageName, page: 1 });
   };
+
   handleLoadMore = () => {
     this.setState({ page: this.state.page + 1 });
   };
+
   handleClickImage = (url, alt) => {
     this.setState({ largeImage: url, altLargeImage: alt, showModal: true });
   };
+
   closeModal = () => {
     this.setState({ showModal: false });
   };
+
   render() {
-    const { images, status, showModal, largeImage, altLargeImage } = this.state;
+    const {
+      images,
+      status,
+      showModal,
+      largeImage,
+      altLargeImage,
+      imagesLength,
+    } = this.state;
 
     if (status === 'idle') {
       return (
@@ -70,6 +89,7 @@ export class App extends Component {
         </div>
       );
     }
+
     if (status === 'pending') {
       return (
         <div>
@@ -78,14 +98,18 @@ export class App extends Component {
         </div>
       );
     }
-    if (status === 'rejected') {
-      return <h1>'Something went wrong 😔. Try again later'</h1>;
+
+    if (status === 'rejected' || imagesLength === 0) {
+      return <h1>'Please update ↻ and enter the correct name'</h1>;
     }
+
     if (status === 'resolved') {
       return (
         <div className={s.App}>
           <Searchbar onSubmit={this.handleFormSubmit} />
-          <ImageGallery imagesData={images} onClick={this.handleClickImage} />
+          {imagesLength && (
+            <ImageGallery imagesData={images} onClick={this.handleClickImage} />
+          )}
           <Button loadMore={this.handleLoadMore} />
           {showModal && (
             <Modal
